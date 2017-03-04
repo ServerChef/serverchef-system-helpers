@@ -1,0 +1,110 @@
+swagger: '2.0'
+info:
+  title: Serverchef System Helpers API
+  description: Flask API Server Component to Help Communicate with System Edit.
+  version: "1.0.0"
+schemes:
+  - https
+  - http
+basePath: /
+produces:
+  - application/json
+paths:
+  /:
+    get:
+      summary: Ensure that server is running
+      operationId: routes.index
+      responses:
+        200:
+          description: Server running
+          schema:
+            type: object
+            properties: 
+              code:
+                type: integer
+                format: int32
+  /systemd/status/{unit_name}:
+    get:
+      summary: Show status of systemd units
+      operationId: routes.systemd_status
+      tags:
+        - systemd
+      parameters:
+        - name: unit_name
+          in: path
+          description: Name of the systemd unit.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Status of the unit
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              status:
+                $ref: '#/definitions/SystemdUnitStatus'
+        406:
+          description: Unit not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              message:
+                type: string
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /port:
+    get:
+      summary: List used ports
+      operationId: routes.port
+      tags:
+        - port
+      responses:
+        200:
+          description: List an array of used ports, the process name and the pid
+          schema:
+            type: object
+            properties: 
+              items:
+                type: array
+                items:
+                  $ref: '#/definitions/UsedPort'
+              code:
+                type: integer
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
+  UsedPort:
+    type: object
+    properties:
+      port:
+        type: integer
+      name:
+        type: string
+      pid:
+        type: integer
+  SystemdUnitStatus:
+    type: object
+    properties:
+      active:
+        type: string
+      status:
+        type: string
+  
