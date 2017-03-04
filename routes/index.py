@@ -1,3 +1,3 @@
 def index():
-    return "Index"
+    return {"code": 0}
 

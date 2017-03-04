@@ -96,7 +96,7 @@ definitions:
     properties:
       port:
         type: integer
-      address:
+      bind_address:
         type: string
         format: ip
       protocol:
