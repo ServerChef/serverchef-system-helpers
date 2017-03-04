@@ -90,3 +90,7 @@ ENV/
 
 *.swp
 .idea
+
+
+# for virtualenv, acronym for serverchef-system-helpers
+/ssh
